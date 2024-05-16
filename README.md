@@ -36,10 +36,6 @@
 
 - React Native
 - React Navigation
-- Styled-components
-
-Run the app
-    ```bash
-    npx react-native run-android # For Android
-    npx react-native run-ios # For iOS
-    ```
+- Bottom Sheet
+- json-server
+- React Native Reanimated
