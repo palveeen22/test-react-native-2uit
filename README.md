@@ -22,17 +22,6 @@
     ```bash
     yarn dev
     ```
-### For Android
-
-```bash
-yarn android
-```
-
-### For iOS
-
-```bash
-yarn ios
-```
 
 ## Features
 
