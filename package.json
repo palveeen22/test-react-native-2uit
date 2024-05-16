@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "dev": "yarn start --reset-cache",
+    "ios-pod": "cd ios && pod install && cd .."
   },
   "dependencies": {
     "react": "18.2.0",
