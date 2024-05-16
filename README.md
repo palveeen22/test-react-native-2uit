@@ -4,15 +4,35 @@
 
 1. Clone the repository
     ```bash
-    git clone <repository-url>
-    cd EcommerceApp
+    git clone https://github.com/palveeen22/test-react-native-2uit.git
+    ```
+   ```bash
+    cd test-react-native-2uit
     ```
 
 2. Install dependencies
     ```bash
-    npm install
+    yarn ios-pod
     ```
+    
     ```bash
+    yarn install
+    ```
+3. Run the app
+    ```bash
+    yarn dev
+    ```
+### For Android
+
+```bash
+yarn android
+```
+
+### For iOS
+
+```bash
+yarn ios
+```
 
 ## Features
 
@@ -28,32 +48,6 @@
 - React Native
 - React Navigation
 - Styled-components
-
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
-```
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
 
 Run the app
     ```bash
