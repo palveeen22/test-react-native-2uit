@@ -1,6 +1,6 @@
 # Тестовое задание для React Native - разработчика 2uit
 
-- Installation
+-- Installation --
 
 1. Clone the repository
     ```bash
@@ -28,3 +28,35 @@
 - React Native
 - React Navigation
 - Styled-components
+
+# using npm
+npm start
+
+# OR using Yarn
+yarn start
+```
+### For Android
+
+```bash
+# using npm
+npm run android
+
+# OR using Yarn
+yarn android
+```
+
+### For iOS
+
+```bash
+# using npm
+npm run ios
+
+# OR using Yarn
+yarn ios
+```
+
+Run the app
+    ```bash
+    npx react-native run-android # For Android
+    npx react-native run-ios # For iOS
+    ```
