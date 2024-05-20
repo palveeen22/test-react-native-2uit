@@ -1,71 +1,64 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {StyleSheet} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, FlatList, ListRenderItem, Image } from 'react-native';
+import { TProduct } from '../types/type';
 
-export type TProducts = {
-  id: number;
-  title: string;
-  product_type: string;
-  price: string;
-  image: string | undefined;
-};
 
-const ProductCard = ({product}: {product: TProducts}) => {
-  return (
-    <View style={styles.card}>
-      <Image source={{uri: product.image}} style={styles.image} />
-      <View style={styles.info}>
-        <Text style={styles.name}>{product.title}</Text>
-        <Text style={styles.price}>{product.price}</Text>
-      </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => console.log('Add to cart')}>
-        <Text style={styles.buttonText}>Tambah ke Keranjang</Text>
+// Define the props type for the ProductCard component
+interface ProductCardProps {
+  data: TProduct[];
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
+  const renderItem: ListRenderItem<TProduct> = ({ item }) => (
+    <View style={styles.cardContainer}>
+      <Image
+        source={{ uri: item.image }}
+        style={styles.cardSkeleton}
+      />
+      <Text style={styles.TextSmall}>{item.title}</Text>
+      <Text style={styles.TextSmallGreen}>{item.price}</Text>
+      <TouchableOpacity>
+        <Text>Add</Text>
       </TouchableOpacity>
     </View>
   );
+
+  return (
+    <FlatList
+      data={data}
+      renderItem={renderItem}
+      keyExtractor={(item, index) => index.toString()}
+      contentContainerStyle={styles.gridCard}
+      numColumns={2}
+    />
+  );
 };
 
+export default ProductCard;
+
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-    width: '50%', // Adjust width for a two-column layout with spacing
-    margin: '1.5%', // Adjust margin for spacing between cards
+  gridCard: {
+    // paddingHorizontal: '2.5%',
+    // paddingVertical: 10,
   },
-  image: {
+  cardContainer: {
+    flex: 1,
+    margin: '2.5%',
+    alignItems: 'flex-start',
+    maxWidth: '45%',
+  },
+  cardSkeleton: {
+    backgroundColor: '#808080',
+    height: 200,
     width: '100%',
-    height: 150,
-    borderRadius: 10,
+    borderRadius: 12,
+    objectFit: 'cover'
   },
-  info: {
-    paddingVertical: 10,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  price: {
+  TextSmall: {
     fontSize: 14,
-    color: '#666',
   },
-  button: {
-    backgroundColor: '#ff335f',
-    padding: 10,
-    borderRadius: 10,
-  },
-  buttonText: {
-    fontSize: 16,
-    color: '#fff',
-    textAlign: 'center',
+  TextSmallGreen: {
+    fontSize: 13,
+    color: '#32CD32',
   },
 });
-
-export default ProductCard;
