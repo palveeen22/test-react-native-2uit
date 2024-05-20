@@ -19,6 +19,14 @@
     yarn install
     ```
 3. Run the app
+   - run server
+   ```bash
+   cd src/data  
+    ```
+   ```bash
+   npx json-server products.json   
+    ```
+   - run app
     ```bash
     yarn dev
     ```
