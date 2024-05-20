@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Animated, SafeAreaView, Text, View, TextInput, FlatList, TouchableOpacity, useWindowDimensions, Button, TouchableOpacityBase, ScrollView } from 'react-native';
-import ProductCard, { CardData } from '../components/ProductCard';
+import ProductCard from '../components/ProductCard';
 import { TProduct } from '../types/type';
+import LaodingSkeleton from '../components/LoadingSkeleton';
 
 interface ItemProps {
     key: string;
@@ -54,6 +55,7 @@ const HomeScreenV2 = () => {
     return (
         <SafeAreaView style={styles.SafeAreaContainer}>
             <View style={styles.Container}>
+                <Text style={styles.TextMedium}>👋🏼 Hello!</Text>
                 <View style={styles.HeaderInput}>
                     <View style={styles.InputContainer}>
                         <TextInput
@@ -74,6 +76,7 @@ const HomeScreenV2 = () => {
                     <Text style={styles.TextSmallGreen}>See all</Text>
                 </View>
                 <ProductCard data={data} />
+                {/* <LaodingSkeleton /> */}
             </View>
         </SafeAreaView >
     );

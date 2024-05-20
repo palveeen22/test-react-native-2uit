@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
       data={data}
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
-      contentContainerStyle={styles.gridCard}
+      // contentContainerStyle={styles.gridCard}
       numColumns={2}
     />
   );
@@ -37,10 +37,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
 export default ProductCard;
 
 const styles = StyleSheet.create({
-  gridCard: {
-    // paddingHorizontal: '2.5%',
-    // paddingVertical: 10,
-  },
+  // gridCard: {
+  //   // paddingHorizontal: '2.5%',
+  //   // paddingVertical: 10,
+  // },
   cardContainer: {
     flex: 1,
     margin: '2.5%',

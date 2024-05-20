@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const ChartScreen = () => {
+const ChatScreen = () => {
     return (
         <View>
-            <Text>ChartScreen</Text>
+            <Text>ChatScreen</Text>
         </View>
     );
 };
 
-export default ChartScreen;
+export default ChatScreen;
