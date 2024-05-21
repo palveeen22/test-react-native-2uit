@@ -24,7 +24,7 @@
    cd src/data  
     ```
    ```bash
-   npx json-server products.json   
+   yarn server
     ```
    - run app
     ```bash
