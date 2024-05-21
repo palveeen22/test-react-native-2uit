@@ -1,47 +1,56 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { TCart } from '../types/type';
 import CartCard from '../components/CartCard';
+import { useNavigation } from '@react-navigation/native';
 
 const ChartScreen = () => {
     const snapPoints = useMemo(() => ['40%'], []);
     const [data, setData] = useState<TCart[]>([])
+    const navigation = useNavigation();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/carts');
-                const json = await response.json();
-                setData(json);
-                // setIsLoading(false);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-        fetchData();
-    }, []);
 
-    console.log(data, "<<<");
+    const handleBackPress = () => {
+        navigation.goBack();
+    };
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch('http://localhost:3000/carts');
+    //             const json = await response.json();
+    //             setData(json);
+    //             // setIsLoading(false);
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
+
+    // console.log(data, "<<<");
 
 
     return (
         <SafeAreaView style={styles.SafeAreaContainer}>
-            <GestureHandlerRootView style={{ flex: 1 }}>
+            <GestureHandlerRootView style={styles.SafeAreaContainer}>
                 <View style={styles.Container}>
-                    <View style={styles.Header}>
-                        <View style={styles.Side}>
-                            <Text style={styles.TextSmall}>⬅️</Text>
+                    <View style={{ height: '60%' }}>
+                        <View style={styles.Header}>
+                            <TouchableOpacity style={styles.Side} onPress={handleBackPress}>
+                                <Text style={styles.TextSmall}>⬅️</Text>
+                            </TouchableOpacity>
+                            <View style={styles.Center}>
+                                <Text style={styles.TextSmall}>My Cart</Text>
+                            </View>
+                            <View style={styles.Side}>
+                                <Text style={styles.TextSmallGreen}>See all</Text>
+                            </View>
                         </View>
-                        <View style={styles.Center}>
-                            <Text style={styles.TextSmall}>My Cart</Text>
-                        </View>
-                        <View style={styles.Side}>
-                            <Text style={styles.TextSmallGreen}>See all</Text>
-                        </View>
+                        <CartCard data={data} />
                     </View>
-                    <CartCard data={data} />
                     <BottomSheet snapPoints={snapPoints}>
                         <View style={styles.BottomSheetContent}>
                             <View style={styles.InputContainer}>

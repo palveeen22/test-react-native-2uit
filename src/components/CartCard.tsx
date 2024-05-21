@@ -1,6 +1,8 @@
 import React from 'react';
 import { FlatList, ListRenderItem, StyleSheet, View, Text, Image } from 'react-native';
 import { TCart, TProduct } from '../types/type';
+import { TouchableOpacity } from '@gorhom/bottom-sheet';
+import { formattedNumber } from '../libs/utils';
 
 interface CartProductCard {
     data: TProduct[]
@@ -18,8 +20,13 @@ const CartCard: React.FC<CartProductCard> = ({ data }) => {
                     <Text style={styles.TextSmall}>{item.title}</Text>
                     <View style={styles.Box2Card}>
                         <Text style={styles.TextSmall}>{item.product_type}</Text>
-                        <Text style={styles.TextMediumBlack}>{item.price}</Text>
+                        <Text style={styles.TextMediumBlack}>{formattedNumber(+item.price)}</Text>
                     </View>
+                    <TouchableOpacity style={styles.ButtonCode} onPress={() => {
+                        console.log("in");
+                    }}>
+                        <Text style={styles.ButtonTextSmall}>Apply</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -77,5 +84,18 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#3E414C',
         fontWeight: '600',
+    },
+    ButtonCode: {
+        marginTop: 10,
+        backgroundColor: '#32CD32',
+        borderRadius: 20,
+        paddingVertical: 6,
+        paddingHorizontal: 14
+    },
+    ButtonTextSmall: {
+        color: 'white',
+        fontSize: 14,
+        fontWeight: '500',
+        textAlign: 'center',
     },
 });
