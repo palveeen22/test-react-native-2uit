@@ -1,39 +1,63 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Animated, SafeAreaView, Text, View, TextInput, FlatList, TouchableOpacity, useWindowDimensions, Button, TouchableOpacityBase, ScrollView } from 'react-native';
-import ProductCard, { CardData } from '../components/ProductCard';
+import {
+    StyleSheet,
+    Animated,
+    SafeAreaView,
+    Text,
+    View,
+    TextInput,
+    FlatList,
+    TouchableOpacity,
+    useWindowDimensions,
+    Button,
+    TouchableOpacityBase,
+    ScrollView,
+} from 'react-native';
+import ProductCard from '../components/ProductCard';
 import { TProduct } from '../types/type';
+import LaodingSkeleton from '../components/LoadingSkeleton';
 
-interface ItemProps {
-    key: string;
-    title: string;
-    description: string;
-}
+// interface ItemProps {
+//     key: string;
+//     title: string;
+//     description: string;
+// }
+
+type TProps = {
+    navigation: any;
+};
 
 
-const HomeScreenV2 = () => {
+const HomeScreenV2 = ({ navigation }: TProps): React.ReactElement => {
     const [categories, setCategories] = useState([
         { id: 1, name: 'Все' },
         { id: 2, name: 'Тип 1' },
         { id: 3, name: 'Тип 2' },
     ]);
 
+    const [data, setData] = useState<TProduct[]>([]);
 
     const [selectedCategory, setSelectedCategory] = useState(null);
+
+    const [searchText, setSearchText] = useState<string>('');
+
+    const [cartItems, setCartItems] = useState<TProduct[]>([]);
+
 
     const handleCategorySelect = (category: any) => {
         setSelectedCategory(category);
     };
 
+    const handleAddToCart = (product: TProduct) => {
+        setCartItems([...cartItems, product]);
+    };
 
-    const [cards, setCards] = useState([
-        { id: '1', title: 'Card 1', price: 12000 },
-        { id: '2', title: 'Card 2', price: 21000 },
-        { id: '3', title: 'Card 2', price: 21000 },
 
-    ]);
-
-    const [data, setData] = useState<TProduct[]>([])
-
+    const filterProducts = () => {
+        return data.filter(product =>
+            product.title.toLowerCase().includes(searchText.toLowerCase()),
+        );
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -47,25 +71,33 @@ const HomeScreenV2 = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [searchText]);
 
-    console.log(data, "<<<");
+    const HandleToDetails = (product: TProduct) => {
+        navigation.navigate("ProductDetail", { id: product.id });
+        console.log(product.id);
+    };
 
     return (
         <SafeAreaView style={styles.SafeAreaContainer}>
             <View style={styles.Container}>
+                <Text style={styles.TextMedium}>👋🏼 Hello!</Text>
                 <View style={styles.HeaderInput}>
                     <View style={styles.InputContainer}>
                         <TextInput
                             style={styles.Input}
                             placeholder="Input here.."
                             placeholderTextColor="#888"
+                            onChangeText={text => setSearchText(text)}
+                            value={searchText}
                         />
                         <Text style={styles.TextMedium}>🔍</Text>
                     </View>
-                    <TouchableOpacity onPress={() => { }}>
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate('Chart Screen');
+                    }}>
                         <View style={styles.CartComponent}>
-                            <Text style={styles.TextMedium}>🛒</Text>
+                            <Text style={styles.TextMedium}>🛒{cartItems.length}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -73,11 +105,15 @@ const HomeScreenV2 = () => {
                     <Text style={styles.TextSmall}>Categories</Text>
                     <Text style={styles.TextSmallGreen}>See all</Text>
                 </View>
-                <ProductCard data={data} />
+                {!searchText ? (
+                    <ProductCard filteredData={filterProducts()} onAddToCart={handleAddToCart} toDetail={HandleToDetails} />
+                ) : (
+                    <LaodingSkeleton />
+                )}
             </View>
-        </SafeAreaView >
+        </SafeAreaView>
     );
-}
+};
 
 export default HomeScreenV2;
 
@@ -88,11 +124,11 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         paddingHorizontal: 20,
-        gap: 20
+        gap: 20,
     },
     Header: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     HeaderInput: {
         width: '100%',
@@ -102,7 +138,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     TextMedium: {
-        fontSize: 18
+        fontSize: 18,
     },
     TextSmall: {
         fontSize: 16,
@@ -110,7 +146,7 @@ const styles = StyleSheet.create({
     },
     TextSmallGreen: {
         fontSize: 14,
-        color: '#32CD32'
+        color: '#32CD32',
     },
     InputContainer: {
         width: '80%',
@@ -133,7 +169,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 10,
         fontSize: 16,
-        padding: 5
+        padding: 5,
     },
     icon: {
         marginRight: 10,
