@@ -11,7 +11,7 @@ function MyTabs() {
         <Tab.Navigator screenOptions={{ headerShown: false }}>
             <Tab.Screen name="Home" component={HomeScreenV2} />
             <Tab.Screen name="My Chart" component={ChartScreen} />
-            <Tab.Screen name="Message" component={ChatScreen} />
+            {/* <Tab.Screen name="Message" component={ChatScreen} /> */}
             <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
     );

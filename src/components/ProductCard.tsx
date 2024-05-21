@@ -12,13 +12,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
   const renderItem: ListRenderItem<TProduct> = ({ item }) => (
     <View style={styles.cardContainer}>
       <Image
-        source={{ uri: item.image }}
+        source={{ uri: item.image || "https://cdn0.iconfinder.com/data/icons/basic-e-commerce-line-color/48/Package_box-512.png" }}
         style={styles.cardSkeleton}
       />
       <Text style={styles.TextSmall}>{item.title}</Text>
       <Text style={styles.TextSmallGreen}>{item.price}</Text>
-      <TouchableOpacity>
-        <Text>Add</Text>
+      <TouchableOpacity style={styles.ButtonCode} onPress={() => {
+        console.log("in");
+      }}>
+        <Text style={styles.ButtonTextSmall}>Apply</Text>
       </TouchableOpacity>
     </View>
   );
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
     maxWidth: '45%',
   },
   cardSkeleton: {
-    backgroundColor: '#808080',
+    // backgroundColor: '#808080',
     height: 200,
     width: '100%',
     borderRadius: 12,
@@ -60,5 +62,18 @@ const styles = StyleSheet.create({
   TextSmallGreen: {
     fontSize: 13,
     color: '#32CD32',
+  },
+  ButtonCode: {
+    marginTop: 10,
+    backgroundColor: '#32CD32',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 14
+  },
+  ButtonTextSmall: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });

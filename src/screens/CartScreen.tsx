@@ -1,10 +1,30 @@
-import React, { useMemo } from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet from '@gorhom/bottom-sheet';
+import { TCart } from '../types/type';
+import CartCard from '../components/CartCard';
 
 const ChartScreen = () => {
-    const snapPoints = useMemo(() => ['35%'], []);
+    const snapPoints = useMemo(() => ['40%'], []);
+    const [data, setData] = useState<TCart[]>([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/carts');
+                const json = await response.json();
+                setData(json);
+                // setIsLoading(false);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    console.log(data, "<<<");
+
 
     return (
         <SafeAreaView style={styles.SafeAreaContainer}>
@@ -21,28 +41,23 @@ const ChartScreen = () => {
                             <Text style={styles.TextSmallGreen}>See all</Text>
                         </View>
                     </View>
-                    <View style={styles.HeaderStart}>
-                        <View style={styles.Box1}></View>
-                        <View style={styles.Box2}>
-                            <Text style={styles.TextSmall}>Rick owens jacket</Text>
-                            <View style={styles.Box2Card}>
-                                <Text style={styles.TextSmall}>Delivery Fee</Text>
-                                <Text style={styles.TextMediumBlack}>$70</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.HeaderStart}>
-                        <View style={styles.Box1}></View>
-                        <View style={styles.Box2}>
-                            <Text style={styles.TextSmall}>Rick owens jacket</Text>
-                            <View style={styles.Box2Card}>
-                                <Text style={styles.TextSmall}>Delivery Fee</Text>
-                                <Text style={styles.TextMediumBlack}>$70</Text>
-                            </View>
-                        </View>
-                    </View>
+                    <CartCard data={data} />
                     <BottomSheet snapPoints={snapPoints}>
                         <View style={styles.BottomSheetContent}>
+                            <View style={styles.InputContainer}>
+                                <TextInput
+                                    style={styles.Input}
+                                    placeholder="Promo Code"
+                                    placeholderTextColor="#888"
+                                />
+                                <TouchableOpacity style={styles.ButtonCode}
+                                    onPress={() => {
+                                        console.log("in");
+                                    }}
+                                >
+                                    <Text style={styles.ButtonTextSmall}>Apply</Text>
+                                </TouchableOpacity>
+                            </View>
                             <View style={styles.HeaderBottom}>
                                 <Text style={styles.TextSmallGrey}>Sub-total</Text>
                                 <Text style={styles.TextMediumBlack}>$1.890</Text>
@@ -56,7 +71,11 @@ const ChartScreen = () => {
                                 <Text style={styles.TextMediumGreen}>$1960</Text>
                             </View>
                             <View style={styles.BottomButtonContainer}>
-                                <TouchableOpacity style={styles.Button}>
+                                <TouchableOpacity style={styles.Button}
+                                    onPress={() => {
+                                        console.log("in");
+                                    }}
+                                >
                                     <Text style={styles.ButtonText}>Proceed To Checkout</Text>
                                 </TouchableOpacity>
                             </View>
@@ -141,6 +160,12 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         textAlign: 'center',
     },
+    ButtonTextSmall: {
+        color: 'white',
+        fontSize: 14,
+        fontWeight: '500',
+        textAlign: 'center',
+    },
     Box1: {
         backgroundColor: '#808080',
         height: 120,
@@ -166,4 +191,26 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         gap: 15
     },
+    InputContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 20,
+        paddingHorizontal: 5,
+        paddingVertical: 4,
+    },
+    Input: {
+        flex: 1,
+        marginLeft: 10,
+        fontSize: 16,
+        padding: 5
+    },
+    ButtonCode: {
+        backgroundColor: '#32CD32',
+        borderRadius: 20,
+        paddingVertical: 6,
+        paddingHorizontal: 14
+    }
 });
