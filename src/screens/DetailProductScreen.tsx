@@ -34,13 +34,13 @@ const DetailProductScreen: React.FC<DetailProp> = ({ id }) => {
             }
         };
         fetchData();
-    }, [paramId]);
+    }, []);
 
     console.log(data, "<<<");
 
     return (
         <SafeAreaView style={styles.SafeAreaContainer}>
-            <View style={styles.Container}>
+            <View style={styles.SafeAreaContainer}>
                 <Image
                     source={{ uri: data?.image || "https://cdn0.iconfinder.com/data/icons/basic-e-commerce-line-color/48/Package_box-512.png" }}
                     style={styles.ImageStyle}
@@ -55,7 +55,7 @@ const DetailProductScreen: React.FC<DetailProp> = ({ id }) => {
                     <Text style={styles.TextMediumGreen}>{data?.product_type}</Text>
                     <View style={styles.BetweenPosition}>
                         <Text style={styles.TextTitle}>{data?.title}</Text>
-                        <Text style={styles.TextSmallGreen}>{(data?.price)}</Text>
+                        <Text style={styles.TextSmallGreen}>{formattedNumber(data?.price)}</Text>
                     </View>
                     <View style={styles.BottomButtonContainer}>
                         <TouchableOpacity style={styles.Button}
@@ -78,22 +78,17 @@ const styles = StyleSheet.create({
     SafeAreaContainer: {
         flex: 1,
     },
-    Container: {
-        flex: 1,
-    },
     ContainerDetail: {
         borderTopColor: "black",
         borderTopWidth: 0.5,
         padding: 10,
         paddingHorizontal: 20,
         flexDirection: "column",
-        // backgroundColor: 'black'
         height: 500
     },
     ImageStyle: {
         width: '100%',
         height: 500,
-        // backgroundColor: "white"
     },
     Header: {
         position: 'absolute',

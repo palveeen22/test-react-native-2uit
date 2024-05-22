@@ -5,33 +5,43 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import { TCart } from '../types/type';
 import CartCard from '../components/CartCard';
 import { useNavigation } from '@react-navigation/native';
+import NoData from '../components/NoData';
 
 const ChartScreen = () => {
     const snapPoints = useMemo(() => ['40%'], []);
     const [data, setData] = useState<TCart[]>([])
+    const [promoCode, setPromoCode] = useState('');
+    const [discount, setDiscount] = useState(0);
     const navigation = useNavigation();
-
 
     const handleBackPress = () => {
         navigation.goBack();
     };
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await fetch('http://localhost:3000/carts');
-    //             const json = await response.json();
-    //             setData(json);
-    //             // setIsLoading(false);
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //         }
-    //     };
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/carts');
+                const json = await response.json();
+                setData(json);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
-    // console.log(data, "<<<");
+    const handleApplyPromoCode = () => {
+        if (promoCode === '2UIT') {
+            setDiscount(70);
+        } else {
+            setDiscount(0);
+        }
+    };
 
+    const subTotal = data.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const deliveryFee = 70;
+    const totalCost = subTotal + deliveryFee - discount;
 
     return (
         <SafeAreaView style={styles.SafeAreaContainer}>
@@ -49,7 +59,11 @@ const ChartScreen = () => {
                                 <Text style={styles.TextSmallGreen}>See all</Text>
                             </View>
                         </View>
-                        <CartCard data={data} />
+                        {data.length === 0 ? (
+                            <NoData text='Пусто' />
+                        ) : (
+                            <CartCard data={data} />
+                        )}
                     </View>
                     <BottomSheet snapPoints={snapPoints}>
                         <View style={styles.BottomSheetContent}>
@@ -58,33 +72,33 @@ const ChartScreen = () => {
                                     style={styles.Input}
                                     placeholder="Promo Code"
                                     placeholderTextColor="#888"
+                                    value={promoCode}
+                                    onChangeText={setPromoCode}
                                 />
-                                <TouchableOpacity style={styles.ButtonCode}
-                                    onPress={() => {
-                                        console.log("in");
-                                    }}
-                                >
+                                <TouchableOpacity style={styles.ButtonCode} onPress={handleApplyPromoCode}>
                                     <Text style={styles.ButtonTextSmall}>Apply</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.HeaderBottom}>
                                 <Text style={styles.TextSmallGrey}>Sub-total</Text>
-                                <Text style={styles.TextMediumBlack}>$1.890</Text>
+                                <Text style={styles.TextMediumBlack}>{`$${subTotal.toFixed(2)}`}</Text>
                             </View>
                             <View style={styles.HeaderBottom}>
                                 <Text style={styles.TextSmallGrey}>Delivery Fee</Text>
-                                <Text style={styles.TextMediumBlack}>$70</Text>
+                                <Text style={styles.TextMediumBlack}>{`$${deliveryFee.toFixed(2)}`}</Text>
                             </View>
+                            {discount > 0 && (
+                                <View style={styles.HeaderBottom}>
+                                    <Text style={styles.TextMediumRed}>Discount</Text>
+                                    <Text style={styles.TextMediumRed}>{`-$${discount.toFixed(2)}`}</Text>
+                                </View>
+                            )}
                             <View style={styles.HeaderBottom}>
                                 <Text style={styles.TextMediumBlack}>Total Cost</Text>
-                                <Text style={styles.TextMediumGreen}>$1960</Text>
+                                <Text style={styles.TextMediumGreen}>{`$${totalCost.toFixed(2)}`}</Text>
                             </View>
                             <View style={styles.BottomButtonContainer}>
-                                <TouchableOpacity style={styles.Button}
-                                    onPress={() => {
-                                        console.log("in");
-                                    }}
-                                >
+                                <TouchableOpacity style={styles.Button} onPress={() => console.log("Proceed to Checkout")}>
                                     <Text style={styles.ButtonText}>Proceed To Checkout</Text>
                                 </TouchableOpacity>
                             </View>
@@ -131,6 +145,11 @@ const styles = StyleSheet.create({
     TextMediumGreen: {
         fontSize: 14,
         color: '#32CD32',
+        fontWeight: '600',
+    },
+    TextMediumRed: {
+        fontSize: 14,
+        color: 'red',
         fontWeight: '600',
     },
     BottomSheetContent: {

@@ -37,7 +37,7 @@ const CartCard: React.FC<CartProductCard> = ({ data }) => {
             data={data}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
-            numColumns={1}  // Set numColumns to 1 for a single column
+            numColumns={1}
         />
     );
 };
@@ -73,8 +73,9 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     Box2Card: {
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: 'space-between',
+        gap: 5
     },
     TextSmall: {
         fontSize: 16,

@@ -14,12 +14,8 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ filteredData, onAddToCart, toDetail }) => {
   const navigation = useNavigation();
-
-  // const handleProductPress = (productId: number) => {
-  //   navigation.navigate('ProductDetail', { productId: productId });
-  // };
-
   const renderItem: ListRenderItem<TProduct> = ({ item }) => (
+
     <View style={styles.cardContainer}>
       <Image
         source={{ uri: item.image || "https://cdn0.iconfinder.com/data/icons/basic-e-commerce-line-color/48/Package_box-512.png" }}
@@ -27,14 +23,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ filteredData, onAddToCart, to
       />
       <Text style={styles.TextSmall}>{item.title}</Text>
       <Text style={styles.TextSmallGreen}>{formattedNumber(+item.price)}</Text>
-      <TouchableOpacity style={styles.ButtonCode} onPress={() => {
-        // handleProductPress(item.id);
-        console.log(item.id);
-        // onAddToCart(item)
-        toDetail(item);
-      }}>
-        <Text style={styles.ButtonTextSmall}>+</Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', rowGap: 10 }}>
+        <TouchableOpacity style={styles.ButtonCode} onPress={() => {
+          toDetail(item);
+        }}>
+          <Text style={styles.ButtonTextSmall}>Detail</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.ButtonCode} onPress={() => {
+          console.log(item.id);
+          onAddToCart(item)
+        }}>
+          <Text style={styles.ButtonTextSmall}>+</Text>
+        </TouchableOpacity>
+      </View>
     </View >
   );
 
@@ -58,7 +59,6 @@ const styles = StyleSheet.create({
     maxWidth: '45%',
   },
   cardSkeleton: {
-    // backgroundColor: '#808080',
     height: 200,
     width: '100%',
     borderRadius: 12,

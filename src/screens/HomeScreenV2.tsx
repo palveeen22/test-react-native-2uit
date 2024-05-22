@@ -1,27 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
-    Animated,
     SafeAreaView,
     Text,
     View,
     TextInput,
-    FlatList,
     TouchableOpacity,
-    useWindowDimensions,
-    Button,
-    TouchableOpacityBase,
-    ScrollView,
 } from 'react-native';
 import ProductCard from '../components/ProductCard';
 import { TProduct } from '../types/type';
 import LaodingSkeleton from '../components/LoadingSkeleton';
-
-// interface ItemProps {
-//     key: string;
-//     title: string;
-//     description: string;
-// }
+import NoData from '../components/NoData';
 
 type TProps = {
     navigation: any;
@@ -29,29 +18,18 @@ type TProps = {
 
 
 const HomeScreenV2 = ({ navigation }: TProps): React.ReactElement => {
-    const [categories, setCategories] = useState([
-        { id: 1, name: 'Все' },
-        { id: 2, name: 'Тип 1' },
-        { id: 3, name: 'Тип 2' },
-    ]);
-
     const [data, setData] = useState<TProduct[]>([]);
-
-    const [selectedCategory, setSelectedCategory] = useState(null);
 
     const [searchText, setSearchText] = useState<string>('');
 
     const [cartItems, setCartItems] = useState<TProduct[]>([]);
 
+    const [isSortedByPrice, setIsSortedByPrice] = useState<boolean>(false);
 
-    const handleCategorySelect = (category: any) => {
-        setSelectedCategory(category);
-    };
 
     const handleAddToCart = (product: TProduct) => {
         setCartItems([...cartItems, product]);
     };
-
 
     const filterProducts = () => {
         return data.filter(product =>
@@ -65,7 +43,6 @@ const HomeScreenV2 = ({ navigation }: TProps): React.ReactElement => {
                 const response = await fetch('http://localhost:3000/products');
                 const json = await response.json();
                 setData(json);
-                // setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -81,12 +58,12 @@ const HomeScreenV2 = ({ navigation }: TProps): React.ReactElement => {
     return (
         <SafeAreaView style={styles.SafeAreaContainer}>
             <View style={styles.Container}>
-                <Text style={styles.TextMedium}>👋🏼 Hello!</Text>
+                <Text style={styles.TextMedium}>👋🏼 Привет!</Text>
                 <View style={styles.HeaderInput}>
                     <View style={styles.InputContainer}>
                         <TextInput
                             style={styles.Input}
-                            placeholder="Input here.."
+                            placeholder="Найти...."
                             placeholderTextColor="#888"
                             onChangeText={text => setSearchText(text)}
                             value={searchText}
@@ -108,7 +85,7 @@ const HomeScreenV2 = ({ navigation }: TProps): React.ReactElement => {
                 {!searchText ? (
                     <ProductCard filteredData={filterProducts()} onAddToCart={handleAddToCart} toDetail={HandleToDetails} />
                 ) : (
-                    <LaodingSkeleton />
+                    <NoData text='не найден' />
                 )}
             </View>
         </SafeAreaView>

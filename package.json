@@ -10,7 +10,8 @@
     "start": "react-native start",
     "test": "jest",
     "dev": "yarn start --reset-cache",
-    "ios-pod": "cd ios && pod install && cd .."
+    "ios-pod": "cd ios && pod install && cd ..",
+    "server": "cd src/data && npx json-server db.json"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.6.1",
