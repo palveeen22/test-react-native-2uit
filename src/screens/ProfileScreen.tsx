@@ -1,13 +1,28 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+  Button,
+  Image
+} from 'react-native';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
-
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState('Влад');
+  const [address, setAddress] = useState('Город Уфа, ул. Рабкоров, 20');
 
   const handleBackPress = () => {
     navigation.goBack();
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
   };
 
   return (
@@ -17,12 +32,42 @@ const ProfileScreen = () => {
           <TouchableOpacity onPress={handleBackPress}>
             <Text style={styles.TextSmall}>⬅️</Text>
           </TouchableOpacity>
-          <Text style={styles.TextSmallGreen}>See all</Text>
+          <Text style={styles.TextSmallGreen}>Profile</Text>
         </View>
         <View style={styles.ContainerDataProfile}>
-          <View style={styles.Circle}>
-          </View>
-          <Text style={styles.TextSmallGreen}>See all</Text>
+          <Image
+            source={{ uri: "https://storage.needpix.com/rsynced_images/blank-profile-picture-973460_1280.png" }}
+            style={styles.Circle}
+            resizeMode="cover"
+          />
+          {isEditing ? (
+            <View style={styles.FormContainer}>
+              <Text style={styles.Label}>Имя</Text>
+              <TextInput
+                style={styles.Input}
+                value={name}
+                onChangeText={setName}
+              />
+              <Text style={styles.Label}>Адресс</Text>
+              <TextInput
+                style={styles.Input}
+                value={address}
+                onChangeText={setAddress}
+              />
+              <Button title="Save" onPress={handleSave} />
+            </View>
+          ) : (
+            <View style={styles.TextContainer}>
+              <Text style={styles.Text}>{name}</Text>
+              <Text style={styles.Text}>{address}</Text>
+              <TouchableOpacity
+                style={styles.EditButton}
+                onPress={() => setIsEditing(true)}
+              >
+                <Text style={styles.ButtonText}>Edit</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -45,14 +90,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 10,
   },
-  Side: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  Center: {
-    flex: 2,
-    alignItems: 'center',
-  },
   TextSmall: {
     fontSize: 16,
     fontWeight: '600',
@@ -71,7 +108,43 @@ const styles = StyleSheet.create({
   Circle: {
     width: 120,
     height: 120,
-    borderRadius: 120, // Half of the width to make it a circle
-    backgroundColor: '#ccc', // Gray color
+    borderRadius: 60,
+    // backgroundColor: '#ccc',
   },
-})
+  Text: {
+    fontSize: 18,
+    marginVertical: 10,
+  },
+  FormContainer: {
+    width: '100%',
+    paddingHorizontal: 10,
+  },
+  Label: {
+    fontSize: 16,
+    marginVertical: 5,
+  },
+  Input: {
+    width: '100%',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+  },
+  EditButton: {
+    backgroundColor: '#32CD32',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  ButtonText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  TextContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
