@@ -2,6 +2,8 @@
 
 -- Installation --
 
+Better using simulator iphone 15
+
 1. Clone the repository
     ```bash
     git clone https://github.com/palveeen22/test-react-native-2uit.git
