@@ -4,8 +4,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { TCart } from '../types/type';
 import CartCard from '../components/CartCard';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import NoData from '../components/NoData';
+import { formattedNumber } from '../libs/utils';
 
 const ChartScreen = () => {
     const snapPoints = useMemo(() => ['40%'], []);
@@ -13,6 +14,7 @@ const ChartScreen = () => {
     const [promoCode, setPromoCode] = useState('');
     const [discount, setDiscount] = useState(0);
     const navigation = useNavigation();
+    const route = useRoute();
 
     const handleBackPress = () => {
         navigation.goBack();
@@ -39,10 +41,20 @@ const ChartScreen = () => {
         }
     };
 
-    const subTotal = data.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const handleDeleteItem = async (id: number) => {
+        try {
+            await fetch(`http://localhost:3000/carts/${id}`, {
+                method: 'DELETE',
+            });
+            setData((prevData) => prevData.filter((item) => item.id !== id));
+        } catch (error) {
+            console.error('Error deleting item:', error);
+        }
+    };
+
+    const subTotal = data.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
     const deliveryFee = 70;
     const totalCost = subTotal + deliveryFee - discount;
-
     return (
         <SafeAreaView style={styles.SafeAreaContainer}>
             <GestureHandlerRootView style={styles.SafeAreaContainer}>
@@ -62,7 +74,7 @@ const ChartScreen = () => {
                         {data.length === 0 ? (
                             <NoData text='Пусто' />
                         ) : (
-                            <CartCard data={data} />
+                                <CartCard data={data} onDelete={handleDeleteItem} />
                         )}
                     </View>
                     <BottomSheet snapPoints={snapPoints}>
@@ -81,21 +93,21 @@ const ChartScreen = () => {
                             </View>
                             <View style={styles.HeaderBottom}>
                                 <Text style={styles.TextSmallGrey}>Sub-total</Text>
-                                <Text style={styles.TextMediumBlack}>{`$${subTotal.toFixed(2)}`}</Text>
+                                <Text style={styles.TextMediumBlack}>{formattedNumber(subTotal)}</Text>
                             </View>
                             <View style={styles.HeaderBottom}>
                                 <Text style={styles.TextSmallGrey}>Delivery Fee</Text>
-                                <Text style={styles.TextMediumBlack}>{`$${deliveryFee.toFixed(2)}`}</Text>
+                                <Text style={styles.TextMediumBlack}>{formattedNumber(deliveryFee)}</Text>
                             </View>
                             {discount > 0 && (
                                 <View style={styles.HeaderBottom}>
                                     <Text style={styles.TextMediumRed}>Discount</Text>
-                                    <Text style={styles.TextMediumRed}>{`-$${discount.toFixed(2)}`}</Text>
+                                    <Text style={styles.TextMediumRed}>{formattedNumber(discount)}</Text>
                                 </View>
                             )}
                             <View style={styles.HeaderBottom}>
                                 <Text style={styles.TextMediumBlack}>Total Cost</Text>
-                                <Text style={styles.TextMediumGreen}>{`$${totalCost.toFixed(2)}`}</Text>
+                                <Text style={styles.TextMediumGreen}>{formattedNumber(totalCost)}</Text>
                             </View>
                             <View style={styles.BottomButtonContainer}>
                                 <TouchableOpacity style={styles.Button} onPress={() => console.log("Proceed to Checkout")}>

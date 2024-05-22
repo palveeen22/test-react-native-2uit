@@ -6,9 +6,10 @@ import { formattedNumber } from '../libs/utils';
 
 interface CartProductCard {
     data: TProduct[]
+    onDelete: (id: number) => void;
 }
 
-const CartCard: React.FC<CartProductCard> = ({ data }) => {
+const CartCard: React.FC<CartProductCard> = ({ data, onDelete }) => {
     const renderItem: ListRenderItem<TProduct> = ({ item }) => (
         <View style={styles.container}>
             <View style={styles.HeaderStart}>
@@ -23,9 +24,9 @@ const CartCard: React.FC<CartProductCard> = ({ data }) => {
                         <Text style={styles.TextMediumBlack}>{formattedNumber(+item.price)}</Text>
                     </View>
                     <TouchableOpacity style={styles.ButtonCode} onPress={() => {
-                        console.log("in");
+                        onDelete(item.id)
                     }}>
-                        <Text style={styles.ButtonTextSmall}>Apply</Text>
+                        <Text style={styles.ButtonTextSmall}>отменить</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -88,10 +89,10 @@ const styles = StyleSheet.create({
     },
     ButtonCode: {
         marginTop: 10,
-        backgroundColor: '#32CD32',
+        backgroundColor: '#ff335f',
         borderRadius: 20,
         paddingVertical: 6,
-        paddingHorizontal: 14
+        paddingHorizontal: 14,
     },
     ButtonTextSmall: {
         color: 'white',

@@ -9,11 +9,16 @@ interface ProductCardProps {
   filteredData: TProduct[];
   onAddToCart: (product: TProduct) => void;
   toDetail: (product: TProduct) => void;
-
+  postToCart: (product: TProduct) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ filteredData, onAddToCart, toDetail }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ filteredData, onAddToCart, toDetail, postToCart }) => {
   const navigation = useNavigation();
+
+  const handlePostClick = (product: TProduct) => {
+    postToCart(product);
+  };
+
   const renderItem: ListRenderItem<TProduct> = ({ item }) => (
 
     <View style={styles.cardContainer}>
@@ -31,7 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ filteredData, onAddToCart, to
         </TouchableOpacity>
         <TouchableOpacity style={styles.ButtonCode} onPress={() => {
           console.log(item.id);
-          onAddToCart(item)
+          handlePostClick(item); // Call handlePostClick with item
         }}>
           <Text style={styles.ButtonTextSmall}>+</Text>
         </TouchableOpacity>

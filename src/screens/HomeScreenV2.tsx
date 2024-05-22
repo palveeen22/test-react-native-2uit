@@ -1,35 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import {
-    StyleSheet,
-    SafeAreaView,
-    Text,
-    View,
-    TextInput,
-    TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, SafeAreaView, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import ProductCard from '../components/ProductCard';
 import { TProduct } from '../types/type';
-import LaodingSkeleton from '../components/LoadingSkeleton';
 import NoData from '../components/NoData';
 
 type TProps = {
     navigation: any;
 };
 
-
 const HomeScreenV2 = ({ navigation }: TProps): React.ReactElement => {
     const [data, setData] = useState<TProduct[]>([]);
-
     const [searchText, setSearchText] = useState<string>('');
-
     const [cartItems, setCartItems] = useState<TProduct[]>([]);
-
     const [isSortedByPrice, setIsSortedByPrice] = useState<boolean>(false);
-
-
-    const handleAddToCart = (product: TProduct) => {
-        setCartItems([...cartItems, product]);
-    };
 
     const filterProducts = () => {
         return data.filter(product =>
@@ -48,11 +31,35 @@ const HomeScreenV2 = ({ navigation }: TProps): React.ReactElement => {
             }
         };
         fetchData();
-    }, [searchText]);
+    }, []);
+
+    useEffect(() => {
+        navigation.setParams({ cartItemCount: cartItems.length });
+    }, [cartItems]);
+
+    const postToCart = async (product: TProduct) => {
+        try {
+            const response = await fetch('http://localhost:3000/carts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(product)
+            });
+            const json = await response.json();
+            setCartItems(prevCartItems => [...prevCartItems, json]);
+        } catch (error) {
+            console.error('Error posting data to cart:', error);
+        }
+    };
 
     const HandleToDetails = (product: TProduct) => {
         navigation.navigate("ProductDetail", { id: product.id });
         console.log(product.id);
+    };
+
+    const handleAddToCart = (product: TProduct) => {
+        setCartItems([...cartItems, product]);
     };
 
     return (
@@ -74,7 +81,7 @@ const HomeScreenV2 = ({ navigation }: TProps): React.ReactElement => {
                         navigation.navigate('Chart Screen');
                     }}>
                         <View style={styles.CartComponent}>
-                            <Text style={styles.TextMedium}>🛒{cartItems.length}</Text>
+                            <Text style={styles.TextMedium}>🛒 {cartItems.length}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -82,8 +89,13 @@ const HomeScreenV2 = ({ navigation }: TProps): React.ReactElement => {
                     <Text style={styles.TextSmall}>Categories</Text>
                     <Text style={styles.TextSmallGreen}>See all</Text>
                 </View>
-                {!searchText ? (
-                    <ProductCard filteredData={filterProducts()} onAddToCart={handleAddToCart} toDetail={HandleToDetails} />
+                {filterProducts().length > 0 ? (
+                    <ProductCard
+                        filteredData={filterProducts()}
+                        onAddToCart={handleAddToCart}
+                        toDetail={HandleToDetails}
+                        postToCart={postToCart}
+                    />
                 ) : (
                     <NoData text='не найден' />
                 )}
