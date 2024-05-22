@@ -55,7 +55,7 @@ const DetailProductScreen: React.FC<DetailProp> = ({ id }) => {
                     <Text style={styles.TextMediumGreen}>{data?.product_type}</Text>
                     <View style={styles.BetweenPosition}>
                         <Text style={styles.TextTitle}>{data?.title}</Text>
-                        <Text style={styles.TextSmallGreen}>{formattedNumber(data?.price)}</Text>
+                        <Text style={styles.TextSmallGreen}>{formattedNumber(+data?.price || 0)}</Text>
                     </View>
                     <View style={styles.BottomButtonContainer}>
                         <TouchableOpacity style={styles.Button}
